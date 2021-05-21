@@ -1,5 +1,9 @@
-var router = require("express").Router();
-var Game = require("../db").import("../models/game");
+const path = require("path");
+const router = require("express").Router();
+const db = require(path.resolve(process.cwd(), "./db"));
+const { DataTypes } = require("sequelize");
+const GameModel = require(path.resolve(process.cwd(), "./models/game"));
+const Game = GameModel(db, DataTypes);
 
 router.get("/all", (req, res) => {
   Game.findAll({ where: { owner_id: req.user.id } }).then(
@@ -109,4 +113,4 @@ router.delete("/remove/:id", (req, res) => {
   );
 });
 
-module.exports = routers;
+module.exports = router;

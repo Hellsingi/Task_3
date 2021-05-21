@@ -1,14 +1,29 @@
-var router = Router();
-var bcrypt = require("bcrypt");
-var jwt = require("jsonwebtoken");
+// const router = require("express").Router();
+// const Sequelize = require("sequelize");
+// const bcrypt = require("bcryptjs");
+// const jwt = require("jsonwebtoken");
+// const sequelize = require("../db");
 
-var User = require("../db").import("../models/user");
+// // const User = require('../db').import('../models/user');
+// const UserModel = require("../models/user");
+// const User = UserModel(sequelize, Sequelize);
+
+
+const path = require("path");
+const router = require("express").Router();
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const db = require(path.resolve(process.cwd(), "./db"));
+const { DataTypes } = require("sequelize");
+const UserModel = require(path.resolve(process.cwd(), "./models/user"))
+const User = UserModel(db, DataTypes);
 
 router.post("/signup", (req, res) => {
+  const hash = bcrypt.hashSync(req.body.user.password, 10)
   User.create({
     full_name: req.body.user.full_name,
     username: req.body.user.username,
-    passwordhash: bcrypt.hashSync(req.body.user.password, 10),
+    passwordhash: hash,
     email: req.body.user.email,
   }).then(
     function signupSuccess(user) {
@@ -35,7 +50,7 @@ router.post("/signin", (req, res) => {
         matches
       ) {
         if (matches) {
-          var token = jwt.sign({ id: user.id }, "lets_play_sum_games_man", {
+          const token = jwt.sign({ id: user.id }, "lets_play_sum_games_man", {
             expiresIn: 60 * 60 * 24,
           });
           res.json({
