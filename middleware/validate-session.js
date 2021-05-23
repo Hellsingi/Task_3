@@ -6,7 +6,7 @@ module.exports = function (req, res, next) {
     next(); // allowing options as a method for request
   } else {
     const sessionToken = req.headers.authorization;
-    console.log(sessionToken);
+    console.log("sessionToken", sessionToken);
     if (!sessionToken)
       return res
         .status(403)

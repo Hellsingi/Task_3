@@ -1,25 +1,14 @@
-// const router = require("express").Router();
-// const Sequelize = require("sequelize");
-// const bcrypt = require("bcryptjs");
-// const jwt = require("jsonwebtoken");
-// const sequelize = require("../db");
-
-// // const User = require('../db').import('../models/user');
-// const UserModel = require("../models/user");
-// const User = UserModel(sequelize, Sequelize);
-
-
 const path = require("path");
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require(path.resolve(process.cwd(), "./db"));
 const { DataTypes } = require("sequelize");
-const UserModel = require(path.resolve(process.cwd(), "./models/user"))
+const UserModel = require(path.resolve(process.cwd(), "./models/user"));
 const User = UserModel(db, DataTypes);
 
 router.post("/signup", (req, res) => {
-  const hash = bcrypt.hashSync(req.body.user.password, 10)
+  const hash = bcrypt.hashSync(req.body.user.password, 10);
   User.create({
     full_name: req.body.user.full_name,
     username: req.body.user.username,
