@@ -1,15 +1,19 @@
-var express = require('express');
-var app = express();
-var db = require('./db');
-var user = require('./controllers/usercontroller');
-var game = require('./controllers/gamecontroller')
+const express = require("express");
+const db = require("./db");
+const bodyParser = require("body-parser");
+const validateSession = require("./middleware/validate-session");
 
+const app = express();
+const userRouter = require("./controllers/usercontroller");
+const gameRouter = require("./controllers/gamecontroller");
 
-db.sync();
-app.use(require('body-parser'));
-app.use('/api/auth', user);
-app.use(require('./middleware/validate-session'))
-app.use('/api/game', game);
-app.listen(function() {
-    console.log("App is listening on 4000");
-})
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use("/api/auth", userRouter);
+app.use("/api/game", gameRouter);
+app.use(validateSession);
+app.get("/health", (req, res) => res.json({ msg: "alive" }));
+app.listen(4000, () => {
+  db.sync();
+  console.log("App is listening on 4000");
+});
