@@ -12,7 +12,7 @@ router.post("/signup", (req, res) => {
   User.create({
     full_name: req.body.user.full_name,
     username: req.body.user.username,
-    passwordhash: hash,
+    passwordHash: hash,
     email: req.body.user.email,
   }).then(
     function signupSuccess(user) {
